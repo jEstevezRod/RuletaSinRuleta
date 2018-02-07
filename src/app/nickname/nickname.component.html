@@ -1,0 +1,10 @@
+<main class="content negri flex-center ">
+  <div class="container-fluid text-center">
+    <h2 style="color: white; padding-top: 10%; font-size: 60px; padding-bottom: 50px">Enter your nickname</h2>
+    <input type="text" [(ngModel)]="nombre">
+    <button class="btn btn-lg btn-info" (click)="sendName()" routerLink="/reglas" routerLinkActive="active">Este será mi
+      nombre
+    </button>
+
+  </div>
+</main>
