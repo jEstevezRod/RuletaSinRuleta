@@ -1,8 +1,23 @@
 .negri {
-  background-color: black;
+    background-color: #156268;
 }
 
 .content {
-  height: 100%;
+    height: 100%;
 
+}
+
+.inputnick {
+    height: 40px;
+    width: 250px;
+    display: inline-block !important;
+}
+
+.title {
+    color: white;
+    padding-top: 10%;
+    font-size: 60px;
+    padding-bottom: 50px;
+    font-family: angrybirds;
+    color: tomato;
 }

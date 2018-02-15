@@ -1,4 +1,19 @@
 .blue {
-  color: dodgerblue;
-  font-size: 1.75em;
+    color: dodgerblue;
+    font-size: 1.75em;
+}
+
+h1 {
+    color: tomato;
+    font-family: "stranger";
+    font-size: 120px;
+}
+
+.bit {
+    font-family: "vcr";
+
+}
+
+body {
+    background-color: #156268 !important;
 }

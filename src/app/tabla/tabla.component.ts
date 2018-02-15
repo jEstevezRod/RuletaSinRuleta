@@ -1,31 +1,90 @@
 import {Component, OnInit} from '@angular/core';
 import {SocketService} from "../socket.service";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
-  selector: 'app-tabla',
-  templateUrl: './tabla.component.html',
-  styleUrls: ['./tabla.component.css']
+    selector: 'app-tabla',
+    templateUrl: './tabla.component.html',
+    styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit {
+    public tip: any;
+    public GlobalPlayers;
+    public currentRoom: any;
+    public currentPlayer;
+    public turno = false;
+    public name;
+    public cajasarray = [];
+    public response;
+    public playersOnRoom = true;
+    public contador = 0;
+    public solucion: string;
+    public nombres = [];
 
-  public name;
-  public name2;
-  public cajas: string = 'Esta es una frase';
-  public cajasarray = [];
+    constructor(public _Socket: SocketService) {
 
-  constructor(public _Socket: SocketService) {
-    this._Socket.getName().subscribe(data => {
-      this.name2 = data;
-      console.log("fsgfdgfddfd")
-    })
-  }
-
-  ngOnInit() {
-
-
-    for (let caja of this.cajas) {
-      this.cajasarray.push(caja)
     }
-  }
 
+    ngOnInit() {
+        this.begin();
+
+        this._Socket.nuevoUsuario$.subscribe(data => this.currentPlayer = data);
+
+        if (!this.currentPlayer) this.currentPlayer = this._Socket.currentPlayerBackup;
+
+        this._Socket.roomInfo$.subscribe(data => this.currentRoom = String(data));
+
+        if (!this.currentRoom) {
+            this.currentRoom = this._Socket.currentRoomBackup;
+            console.log(this.currentRoom)
+        }
+
+        this._Socket.questions$.subscribe(data => {
+            this.cajasarray = [];
+            this.response = data;
+            console.log("HEHEXD" + this.response);
+            for (let caja of this.response.table) this.cajasarray.push(caja)
+            $('#botonbegin').hide()
+        });
+
+        this._Socket.test$.subscribe(data => {
+            this.GlobalPlayers = data;
+            console.log("AAAAAAAA");
+            console.log(this.GlobalPlayers);
+            console.log("current" + this.currentRoom);
+            for (let index of this.GlobalPlayers) {
+                console.log(index.room)
+                if (index.room == this.currentRoom) {
+                    ++this.contador;
+                    if (this.nombres.indexOf(index.name)) this.nombres.push(index.name);
+                    console.log("contador" + this.contador)
+                    console.log(this.nombres)
+                }
+                if (this.contador > 1) {
+                    this.playersOnRoom = false;
+                    $('#needmore').hide();
+                }
+            }
+        });
+        this._Socket.answer$.subscribe(data => {
+            $('app-caja').filter(function () {
+                if (data == $(this).text().toLowerCase().trim()) $(this).addClass('text-noIndent');
+            });
+        })
+    }
+
+    startGame() {
+        this._Socket.startGame();
+    }
+
+    begin() {
+        this._Socket.begin()
+    }
+
+    check(solucion) {
+        this._Socket.check(solucion.trim());
+        this.solucion = '';
+    }
 }

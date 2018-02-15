@@ -1,26 +1,48 @@
 <main class="tablero ">
 
-  <h1 align="center">Bienvenido {{_Socket.userdata.name}}</h1>
+    <h1 align="center" class="title pt-4">Bienvenido {{_Socket.miusuario}}</h1>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div align="center" class="col-md-12 pt-5"><h3>Pista de frase</h3></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9 pt-5 text-center"><h3>{{response?.tip}}</h3></div>
+            <div id="needmore">
+                <h3> Need 1 more player for begin the game</h3>
+            </div>
+            <button id="botonbegin" class="btn btn-info" [disabled]="playersOnRoom" (click)="startGame()">Empezar
+                juego
+            </button>
+            <div class="col-md-3 pt-5 ">
+                <h3><p *ngFor="let p of nombres">{{p}}</p></h3>
+            </div>
+
+
+        </div>
+        <div class="row ">
+            <div class="col-md-9 espe" style="height: 500px; padding: 50px">
+                <app-caja class="text-indent" *ngFor="let caja of cajasarray" [caja]=caja></app-caja>
+            </div>
+            <div class="col-md-3" style="display: flex; flex-flow: column nowrap; justify-content: center">
+                <input id="inputtest"
+                       type="text"
+                       class="form-control"
+                       placeholder="Vocal o consonante"
+                       maxlength="1" [(ngModel)]=solucion
+                       [disabled]="turno">
+                <button class="btn btn-warning" (click)="check(solucion)"> PASAR sadasdasdsad</button>
+                <button class="btn btn-warning"> PASAR TURNO</button>
+
+                <input type="text" class="form-control d-inline-block"
+                       aria-describedby="solucion"
+                       id="solucion" placeholder="Solución"
+                       [disabled]="turno">
+                <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad
+                </small>
+                <button class="btn btn-warning">SOLUCIONAR</button>
+
+            </div>
+        </div>
+
     </div>
-    <div class="row ">
-      <div class="col-md-9 espe" style="height: 500px; padding: 50px">
-        <app-caja *ngFor="let caja of cajasarray" [caja]=caja>d</app-caja>
-      </div>
-      <div class="col-md-3" style="display: flex; flex-flow: column nowrap; justify-content: center"><input type="text"
-                                                                                                            class="form-control"
-                                                                                                            placeholder="Vocal o consonante">
-      </div>
-    </div>
-    <div class="row">
-      <div align="center" class="col-md-12 pt-5"><input type="text" class="form-control" aria-describedby="solucion"
-                                                        id="solucion" placeholder="Solución">
-        <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad</small>
-      </div>
-    </div>
-  </div>
+    <app-chat></app-chat>
 
 </main>

@@ -1,35 +1,76 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
-import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class SocketService {
 
-  public userdata;
-  public nose = new Subject();
-  public nose$ = this.nose.asObservable();
-  private url = 'http://localhost:3000';
-  private socket;
+    public url = 'http://localhost:3000';
+    public socket;
 
-  constructor() {
-    this.socket = io(this.url);
-  }
+    public miusuario = '';
+    public currentPlayerBackup;
+    public currentRoomBackup;
 
-  getName(): Observable<string> {
-    return Observable.create((observer) => {
-      this.socket.on('user', (data) => {
-        observer.next(data);
-        console.log(data)
-      })
-    })
-  };
+    public nuevoUsuario = new Subject();
+    public nuevoUsuario$ = this.nuevoUsuario.asObservable();
 
-  sendName(name) {
-    this.userdata = {name: name};
-    this.socket.emit('new-user', name)
-  }
+    public roomInfoSource = new Subject();
+    public roomInfo$ = this.roomInfoSource.asObservable();
 
+    public messageSource = new Subject();
+    public message$ = this.messageSource.asObservable();
+
+    public questionsSource = new Subject();
+    public questions$ = this.questionsSource.asObservable();
+
+    public testSource = new Subject();
+    public test$ = this.testSource.asObservable();
+
+    public answerSource = new Subject();
+    public answer$ = this.answerSource.asObservable();
+
+
+    constructor() {
+        this.socket = io(this.url);
+
+        this.socket.on('user', (data) => {
+            this.nuevoUsuario.next(data);
+            this.currentPlayerBackup = data;
+        });
+        this.socket.on('connectToRoom', (data) => {
+            this.roomInfoSource.next(data);
+            this.currentRoomBackup = data;
+        });
+        this.socket.on('message', (data) => this.messageSource.next(data));
+
+        this.socket.on('game', (data) => this.questionsSource.next(data));
+
+        this.socket.on('test', data => this.testSource.next(data));
+
+        this.socket.on('answer', data => this.answerSource.next(data));
+    }
+
+    newUser(data) {
+        this.socket.emit('new-user', data);
+        this.miusuario = data;
+    }
+
+    sendMessage(mensaje: any) {
+        this.socket.emit('new-message', mensaje)
+    }
+
+    startGame() {
+        this.socket.emit('start-round')
+    }
+
+    begin() {
+        this.socket.emit('begin')
+    }
+
+    check(letra) {
+        this.socket.emit('response', letra)
+    }
 }
 
 

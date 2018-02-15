@@ -1,0 +1,22 @@
+<!--<div class="container-fluid">-->
+<!--<ul class="chat">-->
+<!--<li *ngFor="let men of Allmensajes">{{men}}</li>-->
+<!--</ul>-->
+<!--<div class="row">-->
+<!--<input id="write" type="text" name="" value="" [(ngModel)]="mensaje">-->
+<!--<button type="button" name="button">Enviar</button>-->
+<!--</div>-->
+<!--</div>-->
+
+<section class="chat">
+    <div class="chatArea">
+        <ul id="messages">
+            <li *ngFor="let men of Allmensajes">{{men.name}} : {{men.msg}}</li>
+        </ul>
+    </div>
+
+</section>
+<form action="">
+    <input id="m" name="input" [(ngModel)]="mensaje" class="form-control" autocomplete="off"/>
+    <button class="btn btn-info btn-md" (click)="sendMessage()">Send</button>
+</form>

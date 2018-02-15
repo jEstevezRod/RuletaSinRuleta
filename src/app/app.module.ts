@@ -11,6 +11,7 @@ import {CommunicationService} from "./communication.service";
 import {TablaComponent} from './tabla/tabla.component';
 import {CajaComponent} from './caja/caja.component';
 import {ReglasComponent} from './reglas/reglas.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
     TablaComponent,
     CajaComponent,
     ReglasComponent,
+    ChatComponent,
 
   ],
   imports: [
