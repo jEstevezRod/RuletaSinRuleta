@@ -117,7 +117,11 @@ io.on('connection', (socket) => {
         });
         socket.on('next', () => {
             for (let player of game) {
-                if (player.room == userroom) player.primero = !player.primero;
+                if (player.room == userroom) {
+                    console.log(player.name + player.primero)
+                    player.primero = !player.primero;
+                    console.log(player.name + player.primero)
+                }
             }
             player = game.filter(data => data.name == socket.username);
             console.log("busco esta" + player);

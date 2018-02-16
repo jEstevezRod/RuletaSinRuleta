@@ -54,13 +54,11 @@ export class TablaComponent implements OnInit {
             console.log(this.GlobalPlayers);
             for (let index of this.GlobalPlayers) {
                 if (index.room == this.currentRoom) {
-                    if (index.numero % 2 == 1) {
+                    if (this._Socket.miusuario == index.name) {
                         this.turno = !index.primero
                     }
-                    if (index.numero % 2 == 0) {
-                        this.turno = index.primero
-                    }
                 }
+
                 if (index.room == this.currentRoom) {
                     ++this.contador;
                     if (this.nombres.indexOf(index.name)) this.nombres.push(index.name);
@@ -74,17 +72,9 @@ export class TablaComponent implements OnInit {
 
         });
         this._Socket.turn$.subscribe(data => {
-                // this.GlobalPlayers = data;
-                // for (let index of this.GlobalPlayers) {
-                //     if (index.room == this.currentRoom) {
-                //         if (index.numero % 2 == 1) {
-                //             this.turno = !index.primero
-                //         }
-                //         if (index.numero % 2 == 0) {
-                //             this.turno = index.primero
-                //         }
-                //     }
-                // }
+                let player = data;
+                this.turno = player[0].primero
+
             }
         );
 
