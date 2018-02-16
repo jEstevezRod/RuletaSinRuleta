@@ -1,6 +1,7 @@
 <main class="tablero ">
 
     <h1 align="center" class="title pt-4">Bienvenido {{_Socket.miusuario}}</h1>
+    <p>{{this.turno}}</p>
 
     <div class="container-fluid">
         <div class="row">
@@ -27,17 +28,18 @@
                        class="form-control"
                        placeholder="Vocal o consonante"
                        maxlength="1" [(ngModel)]=solucion
-                       [disabled]="turno">
-                <button class="btn btn-warning" (click)="check(solucion)"> PASAR sadasdasdsad</button>
-                <button class="btn btn-warning"> PASAR TURNO</button>
+                       [disabled]="this.turno">
+                <button class="btn btn-warning" (click)="check(solucion)" [disabled]="this.turno"> PASAR sadasdasdsad
+                </button>
+                <button class="btn btn-warning" [disabled]="this.turno" (click)="nextTurn()"> PASAR TURNO</button>
 
                 <input type="text" class="form-control d-inline-block"
                        aria-describedby="solucion"
                        id="solucion" placeholder="Solución"
-                       [disabled]="turno">
+                       [disabled]="this.turno">
                 <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad
                 </small>
-                <button class="btn btn-warning">SOLUCIONAR</button>
+                <button class="btn btn-warning" [disabled]="this.turno">SOLUCIONAR</button>
 
             </div>
         </div>

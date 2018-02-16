@@ -10,6 +10,7 @@ declare var $: any;
     styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit {
+    singleplayer: {};
     public tip: any;
     public GlobalPlayers;
     public currentRoom: any;
@@ -44,35 +45,57 @@ export class TablaComponent implements OnInit {
         this._Socket.questions$.subscribe(data => {
             this.cajasarray = [];
             this.response = data;
-            console.log("HEHEXD" + this.response);
             for (let caja of this.response.table) this.cajasarray.push(caja)
             $('#botonbegin').hide()
         });
 
         this._Socket.test$.subscribe(data => {
             this.GlobalPlayers = data;
-            console.log("AAAAAAAA");
             console.log(this.GlobalPlayers);
-            console.log("current" + this.currentRoom);
             for (let index of this.GlobalPlayers) {
-                console.log(index.room)
+                if (index.room == this.currentRoom) {
+                    if (index.numero % 2 == 1) {
+                        this.turno = !index.primero
+                    }
+                    if (index.numero % 2 == 0) {
+                        this.turno = index.primero
+                    }
+                }
                 if (index.room == this.currentRoom) {
                     ++this.contador;
                     if (this.nombres.indexOf(index.name)) this.nombres.push(index.name);
-                    console.log("contador" + this.contador)
-                    console.log(this.nombres)
                 }
                 if (this.contador > 1) {
                     this.playersOnRoom = false;
                     $('#needmore').hide();
                 }
+
             }
+
         });
+        this._Socket.turn$.subscribe(data => {
+                // this.GlobalPlayers = data;
+                // for (let index of this.GlobalPlayers) {
+                //     if (index.room == this.currentRoom) {
+                //         if (index.numero % 2 == 1) {
+                //             this.turno = !index.primero
+                //         }
+                //         if (index.numero % 2 == 0) {
+                //             this.turno = index.primero
+                //         }
+                //     }
+                // }
+            }
+        );
+
         this._Socket.answer$.subscribe(data => {
-            $('app-caja').filter(function () {
-                if (data == $(this).text().toLowerCase().trim()) $(this).addClass('text-noIndent');
-            });
-        })
+                $('app-caja').filter(
+                    function () {
+                        if (data == $(this).text().toLowerCase().trim()) $(this).addClass('text-noIndent');
+                    }
+                );
+            }
+        )
     }
 
     startGame() {
@@ -86,5 +109,9 @@ export class TablaComponent implements OnInit {
     check(solucion) {
         this._Socket.check(solucion.trim());
         this.solucion = '';
+    }
+
+    nextTurn() {
+        this._Socket.nextTurn()
     }
 }
