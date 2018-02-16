@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {Subject} from "rxjs/Subject";
-import { environment} from "../environments/environment";
+import {environment} from "../environments/environment";
 
 @Injectable()
 export class SocketService {
 
 
-    public url = environment.serverSocket;
     public socket;
     public miusuario = '';
     public currentPlayerBackup;
@@ -26,6 +25,7 @@ export class SocketService {
     public answer$ = this.answerSource.asObservable();
     public turnSource = new Subject();
     public turn$ = this.turnSource.asObservable();
+    private url = environment.serverSocket;
 
     constructor() {
         this.socket = io(this.url);
