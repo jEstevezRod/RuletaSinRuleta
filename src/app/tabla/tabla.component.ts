@@ -10,7 +10,7 @@ declare var $: any;
     styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit {
-    singleplayer: {};
+    singleplayer;
     public tip: any;
     public GlobalPlayers;
     public currentRoom: any;
@@ -23,6 +23,7 @@ export class TablaComponent implements OnInit {
     public contador = 0;
     public solucion: string;
     public nombres = [];
+    public player;
 
     constructor(public _Socket: SocketService) {
 
@@ -35,17 +36,26 @@ export class TablaComponent implements OnInit {
 
         if (!this.currentPlayer) this.currentPlayer = this._Socket.currentPlayerBackup;
 
-        this._Socket.roomInfo$.subscribe(data => this.currentRoom = String(data));
+        this._Socket.roomInfo$.subscribe(data => this.currentRoom = data);
 
         if (!this.currentRoom) {
             this.currentRoom = this._Socket.currentRoomBackup;
-            console.log(this.currentRoom)
         }
 
         this._Socket.questions$.subscribe(data => {
             this.cajasarray = [];
             this.response = data;
-            for (let caja of this.response.table) this.cajasarray.push(caja)
+            for (let caja of this.response.table) {
+                this.cajasarray.push(caja)
+            }
+            console.log("estoy montando la pregunta en las cajitas :D ");
+
+            $('app-caja').filter(() => {
+                console.log("entro en el filter de appcaja");
+                if ($(this).text() == " ") {
+                    $(this).css('opacity', '0')
+                }
+            });
             $('#botonbegin').hide()
         });
 
@@ -54,34 +64,32 @@ export class TablaComponent implements OnInit {
             console.log(this.GlobalPlayers);
             for (let index of this.GlobalPlayers) {
                 if (index.room == this.currentRoom) {
-                    if (this._Socket.miusuario == index.name) {
-                        this.turno = !index.primero
-                    }
-                }
-
-                if (index.room == this.currentRoom) {
                     ++this.contador;
                     if (this.nombres.indexOf(index.name)) this.nombres.push(index.name);
+
                 }
                 if (this.contador > 1) {
                     this.playersOnRoom = false;
                     $('#needmore').hide();
                 }
-
             }
-
+            let user = this.GlobalPlayers.filter(data => data.name == this._Socket.miusuario);
+            console.log("1", user);
+            this.turno = !user[0].primero;
+            console.log("4" + this.turno)
         });
         this._Socket.turn$.subscribe(data => {
-                let player = data;
-                this.turno = player[0].primero
-
+                this.GlobalPlayers = data;
+                let user = this.GlobalPlayers.filter(data => data.name == this._Socket.miusuario);
+                this.turno = !user[0].primero;
             }
         );
 
         this._Socket.answer$.subscribe(data => {
-                $('app-caja').filter(
-                    function () {
-                        if (data == $(this).text().toLowerCase().trim()) $(this).addClass('text-noIndent');
+                $('app-caja').filter(function () {
+                        if (data == $(this).text().toLowerCase().trim()) {
+                            $(this).addClass('text-noIndent')
+                        }
                     }
                 );
             }
@@ -90,10 +98,12 @@ export class TablaComponent implements OnInit {
 
     startGame() {
         this._Socket.startGame();
+
     }
 
     begin() {
-        this._Socket.begin()
+        this._Socket.begin();
+
     }
 
     check(solucion) {

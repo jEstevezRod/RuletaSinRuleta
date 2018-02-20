@@ -1,0 +1,11 @@
+.caja {
+    width: 55px;
+    height: 55px;
+    border: 1px solid red;
+    background-color: lightsalmon;
+    margin-right: 4px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}

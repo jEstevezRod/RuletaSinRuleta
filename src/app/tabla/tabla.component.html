@@ -13,6 +13,7 @@
                 juego
             </button>
             <div class="col-md-3 pt-5 ">
+                <h2>Puntuaciones: </h2>
                 <h3><p *ngFor="let p of nombres">{{p}}</p></h3>
             </div>
 
@@ -28,18 +29,19 @@
                        class="form-control"
                        placeholder="Vocal o consonante"
                        maxlength="1" [(ngModel)]=solucion
-                       [disabled]="this.turno">
-                <button class="btn btn-warning" (click)="check(solucion)" [disabled]="this.turno"> PASAR sadasdasdsad
+                       [disabled]=turno>
+                <button class="btn btn-warning mb-5" (click)="check(solucion); nextTurn()" [disabled]=turno>
+                    Comprobar
+                    y pasar turno
                 </button>
-                <button class="btn btn-warning" [disabled]="this.turno" (click)="nextTurn()"> PASAR TURNO</button>
 
-                <input type="text" class="form-control d-inline-block"
+                <input type="text" class="form-control d-inline-block mt-5 w-100"
                        aria-describedby="solucion"
                        id="solucion" placeholder="Solución"
-                       [disabled]="this.turno">
+                       [disabled]=turno>
                 <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad
                 </small>
-                <button class="btn btn-warning" [disabled]="this.turno">SOLUCIONAR</button>
+                <button class="btn btn-warning" [disabled]=turno>SOLUCIONAR</button>
 
             </div>
         </div>

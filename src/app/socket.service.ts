@@ -11,20 +11,28 @@ export class SocketService {
     public miusuario = '';
     public currentPlayerBackup;
     public currentRoomBackup;
+
     public nuevoUsuario = new Subject();
     public nuevoUsuario$ = this.nuevoUsuario.asObservable();
+
     public roomInfoSource = new Subject();
     public roomInfo$ = this.roomInfoSource.asObservable();
+
     public messageSource = new Subject();
     public message$ = this.messageSource.asObservable();
+
     public questionsSource = new Subject();
     public questions$ = this.questionsSource.asObservable();
+
     public testSource = new Subject();
     public test$ = this.testSource.asObservable();
+
     public answerSource = new Subject();
     public answer$ = this.answerSource.asObservable();
+
     public turnSource = new Subject();
     public turn$ = this.turnSource.asObservable();
+
     private url = environment.serverSocket;
 
     constructor() {
@@ -50,7 +58,7 @@ export class SocketService {
     }
 
     nextTurn() {
-        this.socket.emit('next')
+        this.socket.emit('next', this.miusuario)
     }
 
     newUser(data) {
