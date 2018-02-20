@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
         socket.sala = userroom;
         socket.numero = numUser;
         socket.primero = false;
+        socket.puntuacion = 0;
         roomNumber = userroom;
         nameUser.push(name);
 
@@ -85,7 +86,8 @@ io.on('connection', (socket) => {
             room: socket.sala,
             numero: socket.numero,
             primero: socket.primero,
-            total: nameUser
+            total: nameUser,
+            puntuacion: socket.puntuacion
         });
 
 
@@ -107,32 +109,53 @@ io.on('connection', (socket) => {
 
         socket.on('begin', () => {
             io.to(userroom).emit('test', game);
-            copyarray = gameContent;
         });
 
-        socket.on('start-round', () => {
-            let selc = copyarray[0];
-            io.to(userroom).emit('game', selc);
-            selc = copyarray[0];
-            copyarray.splice(copyarray.indexOf(selc), 1);
+        let cont = 0;
 
+        socket.on('start-round', () => {
+            io.to(userroom).emit('game', gameContent[cont]);
+            ++cont
         });
 
         socket.on('next', () => {
             for (let player of game) {
-                if (player.room = userroom) {
+                if (player.room == userroom) {
                     player.primero = !player.primero;
                 }
             }
-            /*
-                        let player = game.filter(data => data.name == username);
-            */
             io.to(userroom).emit('next', game)
         });
 
         socket.on('response', data => {
-            io.to(userroom).emit('answer', data)
+            io.to(userroom).emit('answer', data);
+
+        });
+
+        socket.on('respuesta', data => {
+            console.log("he recibido algo");
+            if (data == gameContent[0].table.toLowerCase()) {
+                console.log("es correcto");
+                let objIndex = game.findIndex(obj => obj.name == socket.username);
+                io.to(userroom).emit('ganador', game[objIndex])
+            } else {
+                console.log("es incorrecto");
+                console.log("has escrito", data);
+                console.log(gameContent[0]);
+                console.log(gameContent[0].table);
+                let objIndex = game.findIndex(obj => obj.name === socket.username);
+                game[objIndex].puntuacion /= 2;
+                io.to(userroom).emit('puntuacion', game)
+            }
+
+        });
+        socket.on('sumar', data => {
+            let objIndex = game.findIndex(obj => obj.name === socket.username);
+            console.log(username);
+            game[objIndex].puntuacion += data * 50;
+            io.to(userroom).emit('puntuacion', game)
         })
+
     });
 
     socket.on('disconnect', () => {

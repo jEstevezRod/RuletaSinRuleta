@@ -11,6 +11,7 @@ export class SocketService {
     public miusuario = '';
     public currentPlayerBackup;
     public currentRoomBackup;
+    public currentWinner;
 
     public nuevoUsuario = new Subject();
     public nuevoUsuario$ = this.nuevoUsuario.asObservable();
@@ -33,6 +34,12 @@ export class SocketService {
     public turnSource = new Subject();
     public turn$ = this.turnSource.asObservable();
 
+    public puntuacionSource = new Subject();
+    public puntuacion$ = this.puntuacionSource.asObservable();
+
+    public ganadorSource = new Subject();
+    public ganador$ = this.ganadorSource.asObservable();
+
     private url = environment.serverSocket;
 
     constructor() {
@@ -54,7 +61,14 @@ export class SocketService {
 
         this.socket.on('answer', data => this.answerSource.next(data));
 
-        this.socket.on('next', data => this.turnSource.next(data))
+        this.socket.on('next', data => this.turnSource.next(data));
+
+        this.socket.on('puntuacion', data => this.puntuacionSource.next(data));
+
+        this.socket.on('ganador', data => {
+            this.ganadorSource.next(data);
+            this.currentWinner = data
+        });
     }
 
     nextTurn() {
@@ -80,6 +94,14 @@ export class SocketService {
 
     check(letra) {
         this.socket.emit('response', letra)
+    }
+
+    chechsolution(solucion) {
+        this.socket.emit('respuesta', solucion)
+    }
+
+    plusPuntuation(canti) {
+        this.socket.emit('sumar', canti)
     }
 }
 

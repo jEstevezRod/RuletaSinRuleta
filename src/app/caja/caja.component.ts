@@ -13,7 +13,6 @@ export class CajaComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('datos de la caja', this.caja);
     }
 
 }

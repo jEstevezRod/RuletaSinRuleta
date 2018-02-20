@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SocketService} from "../socket.service";
+import {Router} from "@angular/router";
 
 declare var jquery: any;
 declare var $: any;
@@ -10,6 +11,7 @@ declare var $: any;
     styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit {
+    solucionfinal: string;
     public tip: any;
     public GlobalPlayers;
     public currentRoom: any;
@@ -23,9 +25,11 @@ export class TablaComponent implements OnInit {
     public solucion: string;
     public nombres = [];
     public puntuacion;
+    public showpuntuaciones = [];
+    public varr;
 
 
-    constructor(public _Socket: SocketService) {
+    constructor(public _Socket: SocketService, public router: Router) {
 
     }
 
@@ -54,7 +58,6 @@ export class TablaComponent implements OnInit {
 
         this._Socket.test$.subscribe(data => {
             this.GlobalPlayers = data;
-            console.log(this.GlobalPlayers);
             for (let index of this.GlobalPlayers) {
                 if (index.room == this.currentRoom) {
                     ++this.contador;
@@ -77,17 +80,31 @@ export class TablaComponent implements OnInit {
         );
 
         this._Socket.answer$.subscribe(data => {
-                $('app-caja').filter(function () {
+                this.varr = $('app-caja').filter(function () {
                         if (data == $(this).text().toLowerCase().trim()) {
-
-                            $(this).addClass('text-noIndent')
+                            $(this).addClass('text-noIndent');
+                            return true
                         }
                     }
-                );
-            }
-        )
-    }
+                ).length;
+                this.plusPuntuation(this.varr);
 
+            }
+        );
+
+        this._Socket.puntuacion$.subscribe(data => {
+                this.GlobalPlayers = data;
+                this.showpuntuaciones = this.GlobalPlayers.filter(data => data.room == this.currentRoom);
+                console.log(this.showpuntuaciones);
+
+            }
+        );
+
+        this._Socket.ganador$.subscribe(data => {
+            console.log("deberia ir");
+            this.router.navigate(['/ganador'])
+        })
+    }
 
 
     startGame() {
@@ -101,9 +118,19 @@ export class TablaComponent implements OnInit {
     check(solucion) {
         this._Socket.check(solucion.trim());
         this.solucion = '';
+
+    }
+
+    checksolution(solucion) {
+        this._Socket.chechsolution(solucion.trim());
+        this.solucionfinal = "";
     }
 
     nextTurn() {
         this._Socket.nextTurn()
+    }
+
+    plusPuntuation(canti) {
+        this._Socket.plusPuntuation(canti)
     }
 }
