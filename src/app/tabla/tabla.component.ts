@@ -10,7 +10,6 @@ declare var $: any;
     styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit {
-    singleplayer;
     public tip: any;
     public GlobalPlayers;
     public currentRoom: any;
@@ -23,7 +22,8 @@ export class TablaComponent implements OnInit {
     public contador = 0;
     public solucion: string;
     public nombres = [];
-    public player;
+    public puntuacion;
+
 
     constructor(public _Socket: SocketService) {
 
@@ -48,14 +48,7 @@ export class TablaComponent implements OnInit {
             for (let caja of this.response.table) {
                 this.cajasarray.push(caja)
             }
-            console.log("estoy montando la pregunta en las cajitas :D ");
 
-            $('app-caja').filter(() => {
-                console.log("entro en el filter de appcaja");
-                if ($(this).text() == " ") {
-                    $(this).css('opacity', '0')
-                }
-            });
             $('#botonbegin').hide()
         });
 
@@ -74,9 +67,7 @@ export class TablaComponent implements OnInit {
                 }
             }
             let user = this.GlobalPlayers.filter(data => data.name == this._Socket.miusuario);
-            console.log("1", user);
             this.turno = !user[0].primero;
-            console.log("4" + this.turno)
         });
         this._Socket.turn$.subscribe(data => {
                 this.GlobalPlayers = data;
@@ -88,6 +79,7 @@ export class TablaComponent implements OnInit {
         this._Socket.answer$.subscribe(data => {
                 $('app-caja').filter(function () {
                         if (data == $(this).text().toLowerCase().trim()) {
+
                             $(this).addClass('text-noIndent')
                         }
                     }
@@ -96,14 +88,14 @@ export class TablaComponent implements OnInit {
         )
     }
 
+
+
     startGame() {
         this._Socket.startGame();
-
     }
 
     begin() {
         this._Socket.begin();
-
     }
 
     check(solucion) {
