@@ -40,6 +40,9 @@ export class SocketService {
     public ganadorSource = new Subject();
     public ganador$ = this.ganadorSource.asObservable();
 
+    public newGameSource = new Subject();
+    public newGame$ = this.newGameSource.asObservable();
+
     private url = environment.serverSocket;
 
     constructor() {
@@ -69,6 +72,8 @@ export class SocketService {
             this.ganadorSource.next(data);
             this.currentWinner = data
         });
+
+        this.socket.on('home', data => this.newGameSource.next(data))
     }
 
     nextTurn() {
@@ -102,6 +107,10 @@ export class SocketService {
 
     plusPuntuation(canti) {
         this.socket.emit('sumar', canti)
+    }
+
+    gotoback() {
+        this.socket.emit('back')
     }
 }
 

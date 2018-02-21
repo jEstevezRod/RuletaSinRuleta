@@ -27,6 +27,7 @@ export class TablaComponent implements OnInit {
     public puntuacion;
     public showpuntuaciones = [];
     public varr;
+    public escondido = true;
 
 
     constructor(public _Socket: SocketService, public router: Router) {
@@ -47,6 +48,7 @@ export class TablaComponent implements OnInit {
         }
 
         this._Socket.questions$.subscribe(data => {
+            this.escondido = false;
             this.cajasarray = [];
             this.response = data;
             for (let caja of this.response.table) {
@@ -103,6 +105,7 @@ export class TablaComponent implements OnInit {
         this._Socket.ganador$.subscribe(data => {
             console.log("deberia ir");
             this.router.navigate(['/ganador'])
+            this.escondido = true;
         })
     }
 

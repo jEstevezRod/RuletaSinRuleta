@@ -22,7 +22,7 @@
             <div class="col-md-9 espe" style="height: 500px; padding: 50px">
                 <app-caja class="text-indent" *ngFor="let caja of cajasarray " [caja]=caja></app-caja>
             </div>
-            <div class="col-md-3" style="display: flex; flex-flow: column nowrap; justify-content: center">
+            <div class="col-md-3" [hidden]="escondido" style="display: flex; flex-flow: column nowrap; justify-content: center">
                 <input id="inputtest"
                        type="text"
                        class="form-control"
@@ -44,7 +44,8 @@
                        [(ngModel)]=solucionfinal>
                 <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad
                 </small>
-                <button class="btn btn-warning" [disabled]=turno (click)="checksolution(solucionfinal)">Solucionar
+                <button class="btn btn-warning" [disabled]=turno (click)="checksolution(solucionfinal);nextTurn()">
+                    Solucionar
                 </button>
 
             </div>

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SocketService} from "../socket.service";
+import {Router} from "@angular/router";
 
 declare var $: any;
 
@@ -11,7 +12,7 @@ declare var $: any;
 export class GanadorComponent implements OnInit {
     public winner;
 
-    constructor(public _Socket: SocketService) {
+    constructor(public _Socket: SocketService, public router: Router) {
     }
 
     ngOnInit() {
@@ -27,27 +28,15 @@ export class GanadorComponent implements OnInit {
             console.log(this.winner);
             console.log(typeof this.winner)
         }
-        $(function () {
-            $(".typed").typed({
-                strings: ["AND THE WINNER IS ...<br><br> "],
-                typeSpeed: 50,
-                startDelay: 1200,
-                backSpeed: 20,
-                backDelay: 500,
-                showCursor: false,
-                onComplete: function () {
-                    $(".dos").typed({
-                        strings: [this.winner],
-                        typeSpeed: 30,
-                        backSpeed: 50,
-                        backDelay: 500,
-                        showCursor: false,
+        this._Socket.newGame$.subscribe(data => {
+            this.router.navigate(['/tabla']);
 
-                    })
-                }
-            })
         })
-
     }
+
+    backtoHome() {
+        this._Socket.gotoback()
+    }
+
 
 }
