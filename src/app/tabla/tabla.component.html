@@ -4,16 +4,17 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-9 pt-5 text-center"><h3>{{response?.tip}}</h3></div>
+            <div class="col-md-9 pt-5 text-center fuente"><h3>{{response?.tip}}</h3></div>
             <div id="needmore" class="text-center">
-                <h3> Need 1 more player for begin the game</h3>
+                <h3 class="title" style="color: tomato;font-size: 70px;margin-right: 50px;"> Need 1 more player for
+                    begin the game</h3>
             </div>
             <button id="botonbegin" class="btn btn-info" [disabled]="playersOnRoom" (click)="startGame()">Empezar
                 juego
             </button>
             <div class="col-md-3 pt-5 ">
-                <h2>Puntuaciones: </h2>
-                <h3><p *ngFor="let p of showpuntuaciones">{{p.name}} : {{p.puntuacion}} puntos</p></h3>
+                <h2 class="fuente" [hidden]="escondido">Puntuaciones: </h2>
+                <h3><p class="fuente" *ngFor="let p of showpuntuaciones">{{p.name}} : {{p.puntuacion}} puntos</p></h3>
             </div>
 
 
@@ -22,14 +23,15 @@
             <div class="col-md-9 espe" style="height: 500px; padding: 50px">
                 <app-caja class="text-indent" *ngFor="let caja of cajasarray " [caja]=caja></app-caja>
             </div>
-            <div class="col-md-3" [hidden]="escondido" style="display: flex; flex-flow: column nowrap; justify-content: center">
+            <div class="col-md-3" [hidden]="escondido"
+                 style="display: flex; flex-flow: column nowrap; justify-content: center">
                 <input id="inputtest"
                        type="text"
                        class="form-control"
                        placeholder="Vocal o consonante"
                        maxlength="1" [(ngModel)]=solucion
                        [disabled]=turno>
-                <small class="form-text text-muted"> si compruebas no podrás solucionar este turno</small>
+                <small class="form-text text-muted fuente"> si compruebas no podrás solucionar este turno</small>
                 <button class="btn btn-warning mb-5" (click)="check(solucion);plusPuntuation(this.varr);nextTurn()"
                         [disabled]=turno>
                     Comprobar
@@ -42,7 +44,8 @@
                        id="solucion" placeholder="Solución"
                        [disabled]=turno
                        [(ngModel)]=solucionfinal>
-                <small id="emailHelp" class="form-text text-muted">Si fallas tu puntuación se verá reducida a la mitad
+                <small id="emailHelp" class="form-text text-muted fuente">Si fallas tu puntuación se verá reducida a la
+                    mitad
                 </small>
                 <button class="btn btn-warning" [disabled]=turno (click)="checksolution(solucionfinal);nextTurn()">
                     Solucionar

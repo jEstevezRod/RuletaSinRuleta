@@ -89,8 +89,6 @@ export class TablaComponent implements OnInit {
                         }
                     }
                 ).length;
-                this.plusPuntuation(this.varr);
-
             }
         );
 
@@ -103,8 +101,7 @@ export class TablaComponent implements OnInit {
         );
 
         this._Socket.ganador$.subscribe(data => {
-            console.log("deberia ir");
-            this.router.navigate(['/ganador'])
+            this.router.navigate(['/ganador']);
             this.escondido = true;
         })
     }
@@ -130,7 +127,9 @@ export class TablaComponent implements OnInit {
     }
 
     nextTurn() {
-        this._Socket.nextTurn()
+        this._Socket.nextTurn();
+        this.plusPuntuation(this.varr);
+
     }
 
     plusPuntuation(canti) {

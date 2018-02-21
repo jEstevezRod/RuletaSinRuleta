@@ -152,9 +152,16 @@ io.on('connection', (socket) => {
 
         });
         socket.on('sumar', data => {
-            let objIndex = game.findIndex(obj => obj.name === socket.username);
-            // console.log(username);
-            game[objIndex].puntuacion += data * 50;
+            for (let player of game) {
+                if (player.room == userroom) {
+                    if (player.name == username) {
+                        if (player.primero == false) {
+                            player.puntuacion += data * 50;
+                            console.log(player)
+                        }
+                    }
+                }
+            }
             io.to(userroom).emit('puntuacion', game)
         });
 
