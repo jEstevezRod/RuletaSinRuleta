@@ -103,7 +103,7 @@ export class TablaComponent implements OnInit {
         this._Socket.ganador$.subscribe(data => {
             this.router.navigate(['/ganador']);
             this.escondido = true;
-        })
+        });
 
         this._Socket.ragequit$.subscribe(data => {
             this.router.navigate([''])
@@ -121,6 +121,7 @@ export class TablaComponent implements OnInit {
 
     check(solucion) {
         this._Socket.check(solucion.trim());
+        this._Socket.socket.on('sumapuntos', data => this.plusPuntuation(this.varr));
         this.solucion = '';
 
     }
@@ -131,7 +132,7 @@ export class TablaComponent implements OnInit {
     }
 
     nextTurn() {
-        this.plusPuntuation(this.varr);
+        //this.plusPuntuation(this.varr);
         this._Socket.nextTurn();
     }
 

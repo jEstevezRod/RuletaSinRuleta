@@ -125,8 +125,9 @@ io.on('connection', (socket) => {
         });
 
         socket.on('response', data => {
+            //socket.to(userroom).broadcast('answer', data);
             io.to(userroom).emit('answer', data);
-
+            socket.emit('sumapuntos', data);
         });
 
         socket.on('respuesta', data => {
@@ -144,12 +145,8 @@ io.on('connection', (socket) => {
         });
         socket.on('sumar', data => {
             for (let player of game) {
-                if (player.room == userroom) {
-                    if (player.name == username) {
-                        if (player.primero == false) {
-                            player.puntuacion += data * 50;
-                        }
-                    }
+                if (player.room == userroom && player.name == username && player.primero == false) {
+                    player.puntuacion += data * 50;
                 }
             }
             io.to(userroom).emit('puntuacion', game)
