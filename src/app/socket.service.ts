@@ -43,6 +43,9 @@ export class SocketService {
     public newGameSource = new Subject();
     public newGame$ = this.newGameSource.asObservable();
 
+    public rageQuitSource = new Subject();
+    public ragequit$ = this.rageQuitSource.asObservable();
+
     private url = environment.serverSocket;
 
     constructor() {
@@ -74,6 +77,8 @@ export class SocketService {
         });
 
         this.socket.on('home', data => this.newGameSource.next(data))
+
+        this.socket.on('ragequit', data => this.rageQuitSource.next(data))
     }
 
     nextTurn() {

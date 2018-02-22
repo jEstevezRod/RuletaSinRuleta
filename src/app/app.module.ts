@@ -13,13 +13,15 @@ import {CajaComponent} from './caja/caja.component';
 import {ReglasComponent} from './reglas/reglas.component';
 import {ChatComponent} from './chat/chat.component';
 import {GanadorComponent} from './ganador/ganador.component';
+import {PagenotfoundComponent} from './pagenotfound/pagenotfound.component';
 
 
 const routes = [
     {'path': '', component: NicknameComponent},
     {'path': 'tabla', component: TablaComponent},
     {'path': 'reglas', component: ReglasComponent},
-    {'path': 'ganador', component: GanadorComponent}
+    {'path': 'ganador', component: GanadorComponent},
+    {'path': '**', component: PagenotfoundComponent}
 ];
 
 @NgModule({
@@ -31,6 +33,7 @@ const routes = [
         ReglasComponent,
         ChatComponent,
         GanadorComponent,
+        PagenotfoundComponent
 
     ],
     imports: [

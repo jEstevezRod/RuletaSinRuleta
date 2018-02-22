@@ -104,6 +104,10 @@ export class TablaComponent implements OnInit {
             this.router.navigate(['/ganador']);
             this.escondido = true;
         })
+
+        this._Socket.ragequit$.subscribe(data => {
+            this.router.navigate([''])
+        })
     }
 
 
@@ -127,9 +131,8 @@ export class TablaComponent implements OnInit {
     }
 
     nextTurn() {
-        this._Socket.nextTurn();
         this.plusPuntuation(this.varr);
-
+        this._Socket.nextTurn();
     }
 
     plusPuntuation(canti) {

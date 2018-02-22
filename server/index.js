@@ -130,21 +130,12 @@ io.on('connection', (socket) => {
         });
 
         socket.on('respuesta', data => {
-            // console.log("he recibido algo");
-            // console.log(cont);
-            // console.log(gameContent[cont]);
             if (data.trim().toLowerCase() == gameContent[cont].table.toLowerCase()) {
-                // console.log(gameContent[cont]);
-                // console.log("es correcto");
                 let objIndex = game.findIndex(obj => obj.name == socket.username);
                 io.to(userroom).emit('ganador', game[objIndex])
                 cont = cont + 1;
                 if (cont >= gameContent.length) cont = 0;
             } else {
-                // console.log("es incorrecto");
-                // console.log("has escrito", data);
-                // console.log(gameContent[cont]);
-                // console.log(gameContent[cont].table);
                 let objIndex = game.findIndex(obj => obj.name === socket.username);
                 game[objIndex].puntuacion /= 2;
                 io.to(userroom).emit('puntuacion', game)
@@ -157,7 +148,6 @@ io.on('connection', (socket) => {
                     if (player.name == username) {
                         if (player.primero == false) {
                             player.puntuacion += data * 50;
-                            console.log(player)
                         }
                     }
                 }
@@ -179,9 +169,8 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         --numUser;
         console.log("Se ha desconectado el usuario " + socket.username);
-        nameUser.splice(nameUser.indexOf(socket.username), 1);
-        game = game.filter(data => data.name !== socket.username);
-        console.log(game);
+        game = game.filter(data => data.room !== roomNumber);
         io.to(roomNumber).emit('user', game);
+        io.to(roomNumber).emit('ragequit', game);
     });
 });
